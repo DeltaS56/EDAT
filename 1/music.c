@@ -111,8 +111,8 @@ Music *music_init(){
   music = aux;
 
   music->id = 0;
-  strcpy(music->title, "");
-  strcpy(music->artist, "");
+  music->title[0] = '\0';
+  music->artist[0] = '\0';
   music->duration = 0;
   music->state = NOT_LISTENED;
 
@@ -196,29 +196,57 @@ Status music_setState (Music * m, const State state){
   return OK;
 };
 
-int music_cmp (const void * m1, const void * m2){
-  if (m1 == NULL || m2 == NULL) return -1;
-  Music song1, song2;
+int music_cmp (const void * m1, const void * m2) {
+  const Music *p1, *p2;
+  int result;
 
-  song1.id = music_getId(m1);
-  song2.id = music_getId(m2);
-  if (music_getArtist(m1)) 
-    strcpy(song1.artist, music_getArtist(m1)); else return -1;
-  strcpy(song2.artist, music_getArtist(m2));
-  strcpy(song1.title, music_getTitle(m1));
-  strcpy(song2.title, music_getTitle(m2));
+  if (m1 == NULL || m2 == NULL) {
+      return 0;
+  }
 
-  if (song1.id < 0 || song2.id < 0 || song) return -1;
-  if(!(song1.id  == song2.id)) return 1;
-  else if ()
+  p1 = (const Music *) m1;
+  p2 = (const Music *) m2;
 
+  if (p1->id < p2->id) return -1;
+  if (p1->id > p2->id) return 1;
 
+  result = strcmp(p1->title, p2->title);
+  if (result != 0) {
+      return result;
+  }
+
+  return strcmp(p1->artist, p2->artist);
 };
 
-void * music_copy (const void * src);
+void *music_copy (const void * src) {
+  const Music *source;
+  Music *trg;
 
-int music_plain_print (FILE * pf, const void * m);
+  if (src == NULL) return NULL;
+  source = (const Music *) src;
 
+  trg = music_init();
+  if (trg == NULL) return NULL;
+
+  trg->id = source->id;
+  strcpy(trg->title, source->title);
+  strcpy(trg->artist, source->artist);
+  trg->duration = source->duration;
+  trg->state = source->state;
+
+  return (void *) trg;
+}
+
+int music_plain_print (FILE * pf, const void * m) {
+  const Music *aux;
+  if (pf == NULL || m == NULL) return -1;
+
+  aux = (const Music *) m;
+
+  return fprintf(pf, "[%ld, %s, %s, %d, %d]", 
+                 aux->id, aux->title, aux->artist, 
+                 (int)aux->duration, (int)aux->state);
+}
 
 int music_formatted_print (FILE * pf, const void * m) {
 	Music * aux;
