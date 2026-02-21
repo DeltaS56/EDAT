@@ -167,3 +167,36 @@ int radio_print(FILE *pf, const Radio *r) {
   }
   return printed;
 }
+
+Status radio_readFromFile(FILE *fin, Radio *r) {
+  char line[256];
+  int num_music = 0, i;
+  char *tmp = NULL;
+  long id_orig, id_dest;
+  
+  if (!fin || !r) return ERROR;
+
+  if (fgets(line, sizeof(line), fin) == NULL) return ERROR;
+  if (sscanf(line, "%d", &num_music) != 1) return ERROR;
+
+  for (i = 0; i < num_music; i++) {
+      if (fgets(line, sizeof(line), fin) == NULL) break;
+      line[strcspn(line, "\r\n")] = 0;
+      
+      if (radio_newMusic(r, line) == ERROR) return ERROR;
+  }
+
+  while (fgets(line, sizeof(line), fin) != NULL) {
+      tmp = strtok(line, " \t\n\r");
+      if (tmp == NULL) continue;
+
+      if (sscanf(tmp, "%ld", &id_orig) != 1) continue;
+
+      while ((tmp = strtok(NULL, " \t\n\r")) != NULL) {
+          if (sscanf(tmp, "%ld", &id_dest) == 1) {
+              radio_newRelation(r, id_orig, id_dest);
+          }
+      }
+  }
+  return OK;
+}

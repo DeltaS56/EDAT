@@ -1,59 +1,56 @@
-########################################################
-CC=gcc
-CFLAGS= -g -Wall -pedantic
-EJS = p1_e1 p1_e2
-#EJS = p1_e1 p1_e2 p1_e3 p1_e2
-########################################################
-OBJECTSP1E1 = p1_e1.o music.o
-OBJECTSP1E2 = p1_e2.o radio.o music.o
-OBJECTSP1E3 = p1_e3.o radio.o music.o
-########################################################
+CC = gcc
+CFLAGS = -g -Wall -pedantic -I.
 
-all: $(EJS) clear
+OBJDIR = obj
+BINDIR = bin
+DATA = radio1.txt
 
-p1_e1: $(OBJECTSP1E1)
-	$(CC) $(CFLAGS) -o p1_e1 $(OBJECTSP1E1)
+EJS = $(BINDIR)/p1_e1 $(BINDIR)/p1_e2 $(BINDIR)/p1_e3
 
-p1_e2: $(OBJECTSP1E2)
-	$(CC) $(CFLAGS) -o p1_e2 $(OBJECTSP1E2)
+OBJS1 = $(OBJDIR)/p1_e1.o $(OBJDIR)/music.o
+OBJS2 = $(OBJDIR)/p1_e2.o $(OBJDIR)/radio.o $(OBJDIR)/music.o
+OBJS3 = $(OBJDIR)/p1_e3.o $(OBJDIR)/radio.o $(OBJDIR)/music.o
 
-p1_e3: $(OBJECTSP1E3)
-	$(CC) $(CFLAGS) -o p1_e3 $(OBJECTSP1E3)
+all: $(OBJDIR) $(BINDIR) $(EJS)
 
+$(BINDIR)/p1_e1: $(OBJS1)
+	$(CC) $(CFLAGS) -o $@ $^
 
-p1_e1.o: p1_e1.c music.h
-	$(CC) $(CFLAGS) -c p1_e1.c
+$(BINDIR)/p1_e2: $(OBJS2)
+	$(CC) $(CFLAGS) -o $@ $^
 
-#p1_e2.o: p1_e2.c music.h radio.h
-#	$(CC) $(CFLAGS) -c p1_e2.c
-	
-#p1_e3.o: p1_e3.c music.h radio.h
-#	$(CC) $(CFLAGS) -c p1_e3.c
+$(BINDIR)/p1_e3: $(OBJS3)
+	$(CC) $(CFLAGS) -o $@ $^
 
-music.o: music.c music.h
-	$(CC) $(CFLAGS) -c music.c
+$(OBJDIR) $(BINDIR):
+	mkdir -p $@
 
-#radio.o: radio.c radio.h music.h
-#	$(CC) $(CFLAGS) -c radio.c
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-clear:
-	rm -rf *.o 
+$(OBJDIR)/p1_e1.o: p1_e1.c music.h
+$(OBJDIR)/p1_e2.o: p1_e2.c music.h radio.h
+$(OBJDIR)/p1_e3.o: p1_e3.c music.h radio.h
+$(OBJDIR)/music.o: music.c music.h
+$(OBJDIR)/radio.o: radio.c radio.h music.h
+
+run: all
+	@echo ">>>>>> Running p1_e1"
+	./$(BINDIR)/p1_e1
+	@echo ">>>>>> Running p1_e2"
+	./$(BINDIR)/p1_e2
+	@echo ">>>>>> Running p1_e3"
+	./$(BINDIR)/p1_e3 $(DATA)
+
+runv: all
+	@echo ">>>>>> Running p1_e1 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p1_e1
+	@echo ">>>>>> Running p1_e2 with valgrind"
+	valgrind --leak-check=full --track-origins=yes ./$(BINDIR)/p1_e2
+	@echo ">>>>>> Running p1_e3 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p1_e3 $(DATA)
 
 clean:
-	rm -rf *.o $(EJS)
+	rm -rf $(OBJDIR) $(BINDIR)
 
-run:
-	@echo ">>>>>>Running p1_e1"
-	./p1_e1
-	@echo ">>>>>>Running p1_e2"
-	./p1_e2 
-	@echo ">>>>>>Running p1_e3"
-	./p1_e3 g1.txt
-
-runv:
-	@echo ">>>>>>Running p1_e1 with valgrind"
-	valgrind --leak-check=full ./p1_e1
-	@echo ">>>>>>Running p1_e2 with valgrind"
-	valgrind --leak-check=full --track-origins=yes ./p1_e2 
-	@echo ">>>>>>Running p1_e2 with valgrind
-	valgrind --leak-check=full ./p1_e3 radio1.txt
+.PHONY: all clean run runv
