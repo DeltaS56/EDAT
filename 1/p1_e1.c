@@ -2,16 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void freeall(Music *m1, Music *m2, Music *m3);
-
 int main(int argc, char *argv[]){
   Music *m1 = NULL, *m2 = NULL, *m3 = NULL;
   int comparison;
 
   m1 = music_init();
-  if (!m1) {
-  return EXIT_FAILURE;
-  }
+  if (!m1) return EXIT_FAILURE;
   m2 = music_init();
   if (!m2) {
     music_free(m1);
@@ -32,11 +28,6 @@ int main(int argc, char *argv[]){
   puts("");
 
   comparison = music_cmp(m1, m2);
-  if (comparison == -1) {
-    music_free(m1);
-    music_free(m2);
-    return EXIT_FAILURE;
-  }
   printf("Equals? %s\n", comparison == 0 ? "Yes" : "No");
 
   m3 = music_copy(m1);
@@ -54,19 +45,10 @@ int main(int argc, char *argv[]){
   puts("");
 
   comparison = music_cmp(m1, m3);
-  if (comparison == -1) {
-    freeall(m1, m2, m3);
-    return EXIT_FAILURE;
-  }
   printf("Equals? %s\n", comparison == 0 ? "Yes" : "No");
 
-
-  freeall(m1, m2, m3);
-  return EXIT_SUCCESS;
-}
-
-void freeall(Music *m1, Music *m2, Music *m3){
   music_free(m1);
   music_free(m2);
   music_free(m3);
-};
+  return EXIT_SUCCESS;
+}

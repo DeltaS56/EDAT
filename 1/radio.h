@@ -176,7 +176,7 @@ int radio_print (FILE *pf, const Radio *r);
  * id:"764" title:"Sweet Child O' Mine" artist:"Guns N' Roses" duration: "356"
  * 482 317
  * 105 231
- * 231 105 764
+ * 231 105
  * 764 231
  *
  * @param fin Pointer to the input stream.

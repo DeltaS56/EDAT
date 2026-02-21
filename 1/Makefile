@@ -1,8 +1,8 @@
 ########################################################
 CC=gcc
 CFLAGS= -g -Wall -pedantic
-EJS = p1_e1
-#EJS = p1_e1 p1_e2 p1_e3
+EJS = p1_e1 p1_e2
+#EJS = p1_e1 p1_e2 p1_e3 p1_e2
 ########################################################
 OBJECTSP1E1 = p1_e1.o music.o
 OBJECTSP1E2 = p1_e2.o radio.o music.o

@@ -117,44 +117,44 @@ Music *music_init(){
   music->state = NOT_LISTENED;
 
   return music;
-};
+}
 
 void music_free (void *m){
   if (m == NULL) return;
 
   free(m);
   m = NULL;
-};
+}
 
 long music_getId (const Music *m){
   if (m == NULL) return -1;
 
   return m->id;
-};
+}
 
 const char* music_getTitle (const Music * m){
   if (m == NULL) return NULL;
 
   return m->title;
-};
+}
 
 const char* music_getArtist (const Music * m){
   if (m == NULL) return NULL;
 
   return m->artist;
-};
+}
 
 unsigned short music_getDuration (const Music * m){
   if (m == NULL) return -1;
 
   return m->duration;
-};
+}
 
 State music_getState (const Music * m){
   if (m == NULL) return ERROR_MUSIC;
 
   return m->state;
-};
+}
 
 Status music_setId (Music * m, const long id){
   if (m == NULL || !id) return ERROR;
@@ -162,7 +162,7 @@ Status music_setId (Music * m, const long id){
   m->id = id;
 
   return OK;
-};
+}
 
 Status music_setTitle (Music * m, const char * title){
   if (m == NULL || title == NULL) return ERROR;
@@ -170,7 +170,7 @@ Status music_setTitle (Music * m, const char * title){
   strcpy(m->title, title);
 
   return OK;
-};
+}
 
 Status music_setArtist (Music * m, const char * artist){
   if (m == NULL || artist == NULL) return ERROR;
@@ -178,7 +178,7 @@ Status music_setArtist (Music * m, const char * artist){
   strcpy(m->artist, artist);
 
   return OK;
-};
+}
 
 Status music_setDuration (Music * m, const unsigned short duration){
   if (m == NULL || duration < 0) return ERROR;
@@ -186,7 +186,7 @@ Status music_setDuration (Music * m, const unsigned short duration){
   m->duration = duration;
 
   return OK;
-};
+}
 
 Status music_setState (Music * m, const State state){
   if (m == NULL || state < 0 || state > 2) return ERROR;
@@ -194,7 +194,7 @@ Status music_setState (Music * m, const State state){
   m->state = state;
 
   return OK;
-};
+}
 
 int music_cmp (const void * m1, const void * m2) {
   const Music *p1, *p2;
@@ -216,7 +216,7 @@ int music_cmp (const void * m1, const void * m2) {
   }
 
   return strcmp(p1->artist, p2->artist);
-};
+}
 
 void *music_copy (const void * src) {
   const Music *source;
@@ -267,6 +267,3 @@ int music_formatted_print (FILE * pf, const void * m) {
 	
 	return counter;
 }
-
-
-
