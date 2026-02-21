@@ -7,19 +7,20 @@
 struct _Radio {
   Music *songs[MAX_MSC];
   Bool relations[MAX_MSC][MAX_MSC];
-   int num_music;
-   int num_relations;
+  int num_music;
+  int num_relations;
 };
 
 int _radio_get_music_index(const Radio *r, long id) {
   int i;
   if (!r) return -1;
+
   for (i = 0; i < r->num_music; i++) {
     if (music_getId(r->songs[i]) == id) {
       return i;
     }
   }
-return -1;
+  return -1;
 }
 
 Radio * radio_init() {
@@ -35,7 +36,7 @@ Radio * radio_init() {
       r->relations[i][j] = FALSE;
     }
   }
-return r;
+  return r;
 }
 
 void radio_free(Radio *r) {
