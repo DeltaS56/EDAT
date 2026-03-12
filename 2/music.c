@@ -21,6 +21,7 @@ struct _Music {
     char artist[STR_LENGTH];
     unsigned short duration;
     State state;
+    int index;
 };
 
 /*----------------------------------------------------------------------------------------*/
@@ -181,7 +182,7 @@ Status music_setArtist (Music * m, const char * artist){
 }
 
 Status music_setDuration (Music * m, const unsigned short duration){
-  if (m == NULL || duration < 0) return ERROR;
+  if (m == NULL) return ERROR;
 
   m->duration = duration;
 
@@ -266,4 +267,16 @@ int music_formatted_print (FILE * pf, const void * m) {
 	counter += fprintf(pf, "\t 0:00 / %02d:%02d ───○ 🔊⠀\n\n", minutes, sec);
 	
 	return counter;
+}
+
+int music_getIndex(Music *song){
+  if (!song) return -1;
+  return song->index;
+}
+
+Status music_setIndex(Music *song, int index){
+  if (!song || index < 0) return ERROR;
+  song->index = index;
+
+  return OK;
 }

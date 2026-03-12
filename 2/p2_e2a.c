@@ -42,7 +42,3 @@ Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout) {
 
     return OK;  
 }
-
-
-
-

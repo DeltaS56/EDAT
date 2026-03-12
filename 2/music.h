@@ -281,5 +281,7 @@ int music_plain_print (FILE * pf, const void * m);
  */
 int music_formatted_print (FILE * pf, const void * m);
 
+int music_getIndex(Music *song);
+Status music_setIndex(Music *song, int index);
 
 #endif /* Music_H_ */

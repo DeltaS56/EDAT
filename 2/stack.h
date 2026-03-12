@@ -1,4 +1,4 @@
-// [ALL]
+/* [ALL] */
 /**
  * @file  stack.h
  * @author EDAT
@@ -104,4 +104,3 @@ size_t stack_size (const Stack *s);
 int stack_print(FILE* fp, const Stack *s,  P_stack_ele_print f);
 
 #endif	/* STACK_H */
-
