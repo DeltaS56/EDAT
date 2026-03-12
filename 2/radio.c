@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "radio.h"
+#include "music.h"
 
 #define MAX_MSC 4096
 
@@ -69,6 +70,7 @@ Status radio_newMusic(Radio *r, char *desc) {
     return OK;
   }
 
+  music_setIndex(new_music, r->num_music);
   r->songs[r->num_music] = new_music;
   r->num_music++;
   return OK;
@@ -199,4 +201,10 @@ Status radio_readFromFile(FILE *fin, Radio *r) {
       }
   }
   return OK;
+}
+
+Music *radio_getSong(Radio *r, int n){
+  if (!r) return NULL;
+
+  return r->songs[n];
 }
