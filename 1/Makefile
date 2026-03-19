@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -pedantic -ansi -I.
+CFLAGS = -g -Wall -pedantic -I.
 
 OBJDIR = obj
 BINDIR = bin
