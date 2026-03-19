@@ -1,0 +1,63 @@
+>>>>>> Running p2_e1 with valgrind
+valgrind --leak-check=full ./bin/p2_e1 radio.txt
+	 ɴᴏᴡ ᴘʟᴀʏɪɴɢ: Sweet Child O' Mine
+	 • Artist Guns N' Roses •
+	──────────⚪──────────
+		◄◄⠀▐▐ ⠀►►
+	 0:00 / 05:56 ───○ 🔊⠀
+
+
+Recently Played:
+SIZE: 5
+[764, Sweet Child O' Mine, Guns N' Roses, 356, 0, 4]
+[231, Livin' on a Prayer, Bon Jovi, 249, 0, 3]
+[105, Don't Stop Believin, Journey, 251, 0, 2]
+[482, Watermelon Sugar, Harry Styles, 174, 0, 1]
+[317, Golden, Huntrix, 194, 0, 0]
+
+1. Back to previous song
+2. Exit
+Choose an option: >>>>>> Running p2_e2a with valgrind
+valgrind --leak-check=full ./bin/p2_e2a playlist1.txt playlist2.txt
+Playlist 0:
+SIZE: 10
+[734, Calm Down, Rema, 239, 0, 9]
+[861, Paint The Town Red, Doja Cat, 231, 0, 8]
+[390, Lose Control, Teddy Swims, 210, 0, 7]
+[908, Flowers, Miley Cyrus, 200, 0, 6]
+[675, Beautiful Things, Benson Boone, 180, 0, 5]
+[157, Cruel Summer, Taylor Swift, 178, 0, 4]
+[512, Espresso, Sabrina Carpenter, 175, 0, 3]
+[289, As It Was, Harry Styles, 167, 0, 2]
+[426, Lovin On Me, Jack Harlow, 146, 0, 1]
+[643, Greedy, Tate McRae, 131, 0, 0]
+Playlist 1:
+SIZE: 6
+[713, Stairway to Heaven, Led Zeppelin, 482, 0, 5]
+[556, Hey Jude, The Beatles, 431, 0, 4]
+[842, Hotel California, Eagles, 391, 0, 3]
+[804, Like a Rolling Stone, Bob Dylan, 369, 0, 2]
+[990, Bohemian Rhapsody, Queen, 354, 0, 1]
+[678, Smells Like Teen Spirit, Nirvana, 301, 0, 0]
+Playlist combined:
+SIZE: 16
+[643, Greedy, Tate McRae, 131, 0, 0]
+[426, Lovin On Me, Jack Harlow, 146, 0, 1]
+[289, As It Was, Harry Styles, 167, 0, 2]
+[512, Espresso, Sabrina Carpenter, 175, 0, 3]
+[157, Cruel Summer, Taylor Swift, 178, 0, 4]
+[675, Beautiful Things, Benson Boone, 180, 0, 5]
+[908, Flowers, Miley Cyrus, 200, 0, 6]
+[390, Lose Control, Teddy Swims, 210, 0, 7]
+[861, Paint The Town Red, Doja Cat, 231, 0, 8]
+[734, Calm Down, Rema, 239, 0, 9]
+[678, Smells Like Teen Spirit, Nirvana, 301, 0, 0]
+[990, Bohemian Rhapsody, Queen, 354, 0, 1]
+[804, Like a Rolling Stone, Bob Dylan, 369, 0, 2]
+[842, Hotel California, Eagles, 391, 0, 3]
+[556, Hey Jude, The Beatles, 431, 0, 4]
+[713, Stairway to Heaven, Led Zeppelin, 482, 0, 5]
+>>>>>> Running p2_e2b with valgrind
+#valgrind --leak-check=full ./bin/p2_e2b playlistA.txt playlistB.txt
+>>>>>> Running p2_e3 with valgrind
+#valgrind --leak-check=full ./bin/p2_e3 radio_dfs.txt 1 9

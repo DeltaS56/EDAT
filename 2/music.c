@@ -168,8 +168,9 @@ Status music_setId (Music * m, const long id){
 Status music_setTitle (Music * m, const char * title){
   if (m == NULL || title == NULL) return ERROR;
 
-  strcpy(m->title, title);
-
+  strncpy(m->title, title, STR_LENGTH - 1);
+  m->title[STR_LENGTH - 1] = '\0'; 
+  
   return OK;
 }
 
@@ -244,9 +245,9 @@ int music_plain_print (FILE * pf, const void * m) {
 
   aux = (const Music *) m;
 
-  return fprintf(pf, "[%ld, %s, %s, %d, %d]", 
+  return fprintf(pf, "[%ld, %s, %s, %d, %d, %d]", 
                  aux->id, aux->title, aux->artist, 
-                 (int)aux->duration, (int)aux->state);
+                 (int)aux->duration, (int)aux->state, aux->index);
 }
 
 int music_formatted_print (FILE * pf, const void * m) {

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "radio.h"
 #include "music.h"
+#include "stack.h"
 
 #define MAX_MSC 4096
 
@@ -207,4 +208,55 @@ Music *radio_getSong(Radio *r, int n){
   if (!r) return NULL;
 
   return r->songs[n];
+}
+
+Status radio_depthSearch(Radio *r, long from_id, long to_id) {
+  Stack *s = NULL;
+  Music *m_curr = NULL, *m_near = NULL;
+  int i, i_curr, i_near;
+  Status st = OK;
+
+  if (!r) return ERROR;
+
+  for (i = 0; i < r->num_music; i++) {
+    music_setState(r->songs[i], NOT_LISTENED);
+  }
+
+  i_curr = _radio_get_music_index(r, from_id);
+  if (i_curr == -1) return ERROR;
+
+  s = stack_init();
+  if (!s) return ERROR;
+
+  music_setState(r->songs[i_curr], LISTENED);
+  stack_push(s, r->songs[i_curr]);
+
+  fprintf(stdout, "Music exploration path:\n");
+
+  while (stack_isEmpty(s) == FALSE && st == OK) {
+    m_curr = (Music *)stack_pop(s);
+
+    music_plain_print(stdout, m_curr);
+    fprintf(stdout, "\n");
+
+    if (music_getId(m_curr) == to_id) {
+      break;
+    } else {
+      i_curr = _radio_get_music_index(r, music_getId(m_curr));
+      
+      for (i_near = 0; i_near < r->num_music; i_near++) {
+        if (r->relations[i_curr][i_near] == TRUE) {
+          m_near = r->songs[i_near];
+          
+          if (music_getState(m_near) == NOT_LISTENED) {
+            music_setState(m_near, LISTENED);
+            stack_push(s, m_near);
+          }
+        }
+      }
+    }
+  }
+
+  stack_free(s);
+  return OK;
 }
