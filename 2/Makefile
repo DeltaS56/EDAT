@@ -1,13 +1,12 @@
 CC = gcc
-CFLAGS = -g -Wall -pedantic -ansi -I.
+CFLAGS = -g -Wall -I.
 LDFLAGS = -L.
 LDLIBS = -lstack
 
 OBJDIR = obj
 BINDIR = bin
-DATA = radio.txt  #a cambiar
 
-EJS = $(BINDIR)/p2_e1 #$(BINDIR)/p2_e2a #$(BINDIR)/p2_e2b #$(BINDIR)/p2_e3
+EJS = $(BINDIR)/p2_e1 $(BINDIR)/p2_e2a $(BINDIR)/p2_e2b $(BINDIR)/p2_e3
 
 OBJS1  = $(OBJDIR)/p2_e1.o $(OBJDIR)/radio.o $(OBJDIR)/music.o
 OBJS2A = $(OBJDIR)/p2_e2a.o $(OBJDIR)/radio.o $(OBJDIR)/music.o
@@ -42,12 +41,24 @@ $(OBJDIR)/music.o: music.c music.h types.h
 $(OBJDIR)/radio.o: radio.c radio.h music.h types.h
 
 run: all
-	@echo ">>>>>> Running p2_e1 with $(DATA)"
-	./$(BINDIR)/p2_e1 $(DATA)
+	@echo ">>>>>> Running p2_e1"
+	./$(BINDIR)/p2_e1 radio.txt
+	@echo ">>>>>> Running p2_e2a"
+	./$(BINDIR)/p2_e2a playlist1.txt playlist2.txt
+	@echo ">>>>>> Running p2_e2b"
+	./$(BINDIR)/p2_e2b playlistA.txt playlistB.txt
+	@echo ">>>>>> Running p2_e3"
+	./$(BINDIR)/p2_e3 radio_dfs.txt 1 9
 
 runv: all
 	@echo ">>>>>> Running p2_e1 with valgrind"
-	valgrind --leak-check=full ./$(BINDIR)/p2_e1 $(DATA)
+	valgrind --leak-check=full ./$(BINDIR)/p2_e1 radio.txt
+	@echo ">>>>>> Running p2_e2a with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p2_e2a playlist1.txt playlist2.txt
+	@echo ">>>>>> Running p2_e2b with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p2_e2b playlistA.txt playlistB.txt
+	@echo ">>>>>> Running p2_e3 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p2_e3 radio_dfs.txt 1 9
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR)

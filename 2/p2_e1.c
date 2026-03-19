@@ -71,9 +71,13 @@ int main(int argc, char *argv[]){
     return EXIT_FAILURE;
   }
 
+  for (i = 0; i < radio_getNumberOfMusic(r); i++) {
+    stack_push(s, radio_getSong(r, i));
+  }
+
   while (!stack_isEmpty(s)) {
     option = show_player_menu(s);
-    if (option == 1) {
+    if (option == 1 && !stack_isEmpty(s)) {
       stack_pop(s);
     } else break;
   }
