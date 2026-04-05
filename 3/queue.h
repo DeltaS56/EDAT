@@ -6,9 +6,9 @@
 #define	QUEUE_H
 
 #include <stdio.h>
-#include "types.h"
+#include "types.h" 
 
-/** 
+/**
  * @brief Data type to declare a queue variable. 
  *
  **/
