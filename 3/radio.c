@@ -49,6 +49,7 @@ void radio_free(Radio *r) {
     music_free(r->songs[i]);
   }
   free(r);
+  r = NULL;
 }
 
 Bool radio_contains(const Radio *r, long id) {
