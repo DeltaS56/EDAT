@@ -157,7 +157,7 @@ State music_getState (const Music * m){
 }
 
 Status music_setId (Music * m, const long id){
-  if (m == NULL || !id) return ERROR;
+  if (m == NULL || id < 0) return ERROR;
 
   m->id = id;
 
@@ -181,7 +181,7 @@ Status music_setArtist (Music * m, const char * artist){
 }
 
 Status music_setDuration (Music * m, const unsigned short duration){
-  if (m == NULL || duration < 0) return ERROR;
+  if (m == NULL) return ERROR;
 
   m->duration = duration;
 
