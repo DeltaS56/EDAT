@@ -190,4 +190,6 @@ Music *radio_getSong(Radio *r, int n);
 
 Status radio_depthSearch(Radio *r, long from_id, long to_id);
 
+Status radio_breadthSearch(Radio *r, long from_id, long to_id);
+
 #endif /* radio_H */

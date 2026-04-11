@@ -1,6 +1,6 @@
+#include <stdlib.h>
 #include "queue.h"
 #include "types.h" 
-#include "stdlib.h"
 
 #define MAX_QUEUE 2048
 
@@ -104,7 +104,7 @@ int queue_print(FILE *fp, const Queue *q, p_queue_ele_print f) {
     
     fprintf(fp, "\n");
         
-    aux = q->data + (aux - q->data +1) % MAX_QUEUE;
+    aux = (void **)q->data + (aux - (void **)q->data +1) % MAX_QUEUE;
   }
 
   fprintf(fp, "\n");
