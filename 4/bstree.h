@@ -10,6 +10,9 @@
  */
 typedef struct _BSTree BSTree;
 
+typedef int (*P_ele_print)(FILE *, const void *);
+typedef int (*P_ele_cmp)(const void *, const void *);
+
 /**
  * @brief Public function that creates a new BSTree.
  *

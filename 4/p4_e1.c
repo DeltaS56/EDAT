@@ -124,7 +124,7 @@ int main(int argc, char const *argv[]) {
 	songs = radio_getSongs(r);
 	n = radio_getNumberOfMusic(r);
 	
-	index = _radio_findmusicById(r, music_id);
+	index = _radio_get_music_index(r, music_id);
 	m = songs[index];
 	if (m == NULL) {
 		printf("Error when initialising music with id: %ld\n", music_id);
@@ -171,14 +171,12 @@ int main(int argc, char const *argv[]) {
     time = clock() - time;
     fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
 
-/*EXERCISE 2 - TREE_REMOVE
     fprintf(f_out, "Removing element in tree: ");
     time = clock();
     fprintf(f_out, "%s", tree_remove(t, m) == OK ? "OK" : "ERR");
     time = clock() - time;
     fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
     fprintf(f_out, "Tree size: %ld\nTree depth: %d\n", tree_size(t), tree_depth(t));
-*/
   } else {
     fprintf(f_out, "Element NOT found");
     time = clock() - time;
@@ -188,3 +186,11 @@ int main(int argc, char const *argv[]) {
   tree_destroy(t);
   mainCleanUp (EXIT_SUCCESS, r, f_in);
 }
+
+/* 1.¿Por qué es así? : Porque al insertar datos desordenados (modo "normal"), los elementos se van distribuyendo entre las ramas izquierdas y derechas, lo que hace que
+  lo que el árbol tenga poca profundidad. Sin embargo, si se insertan datos ordenados (modo "sorted"), el árbol no crea ramas sino una única linea recta. Esto hace que
+  el árbol tenga mucha profundidad, lo que obliga al programa recorrer los nodos uno por uno, y por ende hace que el programa sea más lento.
+  
+  2.¿Hay alguna propiedad del árbol que permita explicar este comportamiento? : Sí, la "Propiedad del Árbol Binario de Búsqueda". Esta propiedad expone que todo elemento
+  mayor que un nodo debe insertarse obligatoriamente en su subárbol derecho. Como en el modo "sorted" cada canción nueva que leemos del archivo es mayor que la anterior,
+  el algoritmo se ve obligado, debido a esta propiedad, a colocarla siempre a la derecha del último nodo.*/

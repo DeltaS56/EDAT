@@ -192,4 +192,8 @@ Status radio_depthSearch(Radio *r, long from_id, long to_id);
 
 Status radio_breadthSearch(Radio *r, long from_id, long to_id);
 
+int _radio_get_music_index(const Radio *r, long id);
+
+Music **radio_getSongs(Radio *r);
+
 #endif /* radio_H */

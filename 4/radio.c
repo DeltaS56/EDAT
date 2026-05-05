@@ -212,6 +212,13 @@ Music *radio_getSong(Radio *r, int n){
   return r->songs[n];
 }
 
+Music **radio_getSongs(Radio *r){
+  if (!r) return NULL;
+
+  return r->songs;
+}
+
+
 Status radio_depthSearch(Radio *r, long from_id, long to_id) {
   Stack *s = NULL;
   Music *m_curr = NULL, *m_near = NULL;
