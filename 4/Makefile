@@ -6,21 +6,16 @@ LDLIBS = -lstack
 OBJDIR = obj
 BINDIR = bin
 
-EJS = $(BINDIR)/p3_e1 $(BINDIR)/p3_e2 $(BINDIR)/p3_e3
+EJS = $(BINDIR)/p4_e1 $(BINDIR)/p4_e2 
 
-OBJS1 = $(OBJDIR)/p3_e1.o $(OBJDIR)/radio.o $(OBJDIR)/music.o $(OBJDIR)/queue.o
-OBJS2 = $(OBJDIR)/p3_e2.o $(OBJDIR)/radio.o $(OBJDIR)/music.o $(OBJDIR)/queue.o
-OBJS3 = $(OBJDIR)/p3_e3.o $(OBJDIR)/radio.o $(OBJDIR)/music.o $(OBJDIR)/list.o $(OBJDIR)/queue.o
+OBJS = $(addprefix $(OBJDIR)/, radio.o music.o queue.o bstree.o list.o)
 
 all: $(OBJDIR) $(BINDIR) $(EJS)
 
-$(BINDIR)/p3_e1: $(OBJS1)
+$(BINDIR)/p4_e1: $(OBJDIR)/p4_e1.o $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-$(BINDIR)/p3_e2: $(OBJS2)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-$(BINDIR)/p3_e3: $(OBJS3)
+$(BINDIR)/p4_e2: $(OBJDIR)/p4_e2.o $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 $(OBJDIR) $(BINDIR):
@@ -29,29 +24,30 @@ $(OBJDIR) $(BINDIR):
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/p3_e1.o: p3_e1.c music.h radio.h queue.h
-$(OBJDIR)/p3_e2.o: p3_e2.c music.h radio.h
-$(OBJDIR)/p3_e3.o: p3_e3.c music.h radio.h list.h
+$(OBJDIR)/p4_e1.o: p4_e1.c music.h radio.h queue.h
+$(OBJDIR)/p4_e2.o: p4_e2.c music.h radio.h
 $(OBJDIR)/music.o: music.c music.h types.h
 $(OBJDIR)/radio.o: radio.c radio.h music.h types.h queue.h stack.h
 $(OBJDIR)/queue.o: queue.c queue.h types.h
+$(OBJDIR)/stack.o: stack.c stack.h types.h
 $(OBJDIR)/list.o: list.c list.h types.h
+$(OBJDIR)/bstree.o: bstree.c bstree.h list.h types.h
 
 run: all
-	@echo ">>>>>> Running p3_e1"
-	./$(BINDIR)/p3_e1 radio.txt
-	@echo ">>>>>> Running p3_e2"
-	./$(BINDIR)/p3_e2 radio_bfs.txt 1 10
-	@echo ">>>>>> Running p3_e3"
-	./$(BINDIR)/p3_e3 radio_bfs.txt
+	@echo ">>>>>> Running p4_e1"
+	./$(BINDIR)/p4_e1 data_music_10.txt 8 normal
+	@echo ">>>>>> Running p4_e1 sorted"
+	./$(BINDIR)/p4_e1 data_music_10.txt 8 sorted
+	@echo ">>>>>> Running p4_e2"
+	./$(BINDIR)/p4_e2 data_music_10.txt 3 7
 
 runv: all
-	@echo ">>>>>> Running p3_e1 with valgrind"
-	valgrind --leak-check=full ./$(BINDIR)/p3_e1 radio.txt
-	@echo ">>>>>> Running p3_e2 with valgrind"
-	valgrind --leak-check=full ./$(BINDIR)/p3_e2 radio_bfs.txt 1 2
-	@echo ">>>>>> Running p3_e3 with valgrind"
-	valgrind --leak-check=full ./$(BINDIR)/p3_e3 radio_bfs.txt
+	@echo ">>>>>> Running p4_e1 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p4_e1 data_music_10.txt 8 normal
+	@echo ">>>>>> Running p4_e1 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p4_e1 data_music_10.txt 8 sorted
+	@echo ">>>>>> Running p4_e2 with valgrind"
+	valgrind --leak-check=full ./$(BINDIR)/p4_e2 data_music_10.txt 3 7
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR)

@@ -22,6 +22,11 @@ struct _BSTree {
 /*** BSTNode TAD private functions ***/
 void _tree_rangeSearch_rec(BSTNode *node, void *min, void *max, List *list, P_ele_cmp cmp);
 int _tree_countLongSongs_rec(BSTNode *node, int min_duration);
+void *_tree_find_min_rec(BSTNode *pn);
+void *_tree_find_max_rec(BSTNode *pn);
+Bool _tree_contains_rec(BSTNode *pn, const void *e, P_ele_cmp cmp);
+BSTNode *_tree_insert_rec(BSTNode *pn, const void *e, P_ele_cmp cmp, Status *st);
+
 BSTNode *_bst_node_new() {
   BSTNode *pn = NULL;
 
@@ -208,3 +213,170 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
 }
 
 /**** TODO: find_min, find_max, insert, contains, remove ****/
+void *_tree_find_min_rec(BSTNode *pn) {
+  if (!pn) return NULL;
+
+  if (!pn->left) return pn->info;
+
+  return _tree_find_min_rec(pn->left);
+}
+
+void *_tree_find_max_rec(BSTNode *pn) {
+  if (!pn) return NULL;
+
+  if (!pn->right) return pn->info;
+
+  return _tree_find_max_rec(pn->right);
+}
+
+Bool _tree_contains_rec(BSTNode *pn, const void *e, P_ele_cmp cmp) {
+  int c;
+  if (!pn) return FALSE;
+
+  c = cmp(e, pn->info);
+  if (!c) return TRUE;
+  if (c < 0) return _tree_contains_rec(pn->left, e, cmp);
+
+  return _tree_contains_rec(pn->right, e, cmp);
+}
+
+BSTNode *_tree_insert_rec(BSTNode *pn, const void *e, P_ele_cmp cmp, Status *st) {
+  int c;
+  BSTNode *n = NULL;
+
+  if (!pn) {
+    n =_bst_node_new();
+    if (!n) {
+      *st = ERROR;
+      return NULL;
+    }
+    n->info = (void *)e;
+    *st = OK;
+    return n;
+  }
+
+  c = cmp(e, pn->info);
+  if (!c) {
+    *st = OK;
+    return pn;
+  }
+
+  if (c < 0) pn->left = _tree_insert_rec(pn->left, e, cmp, st);
+  else pn->right = _tree_insert_rec(pn->right, e, cmp, st);
+
+  return pn;
+}
+
+BSTNode *_tree_remove_rec(BSTNode *pn, const void *e, P_ele_cmp cmp_ele) {
+  int cmp;
+  BSTNode *ret_node = NULL;
+  void *aux_info = NULL;
+
+  if (!pn) return NULL;
+
+  cmp = cmp_ele(e, pn->info);
+
+  if (cmp < 0) {
+    pn->left = _tree_remove_rec(pn->left, e, cmp_ele);
+  } else if (cmp > 0) {
+    pn->right = _tree_remove_rec(pn->right, e, cmp_ele);
+  } else {
+    if(!pn->left && !pn->right) {
+      _bst_node_free(pn);
+      return NULL;
+
+    } else if (!pn->left && pn->right) {
+      ret_node = pn->right;
+      _bst_node_free(pn);
+      return ret_node;
+
+    } else if (pn->left && !pn->right) {
+      ret_node = pn->left;
+      _bst_node_free(pn);
+      return ret_node;
+
+    } else {
+      aux_info = _tree_find_min_rec(pn->right);
+      pn->info = aux_info;
+      pn->right = _tree_remove_rec(pn->right, aux_info, cmp_ele);
+    }
+      return pn;
+
+    }
+    return pn;
+}
+
+void _tree_rangeSearch_rec(BSTNode *node, void *min, void *max, List *list, P_ele_cmp cmp) {
+  int cmp_min, cmp_max;
+
+  if (!node) return;
+
+  cmp_min = cmp(node->info, min);
+  cmp_max = cmp(node->info, max);
+
+  if (cmp_min > 0) {
+    _tree_rangeSearch_rec(node->left, min, max, list, cmp);
+  }
+
+  if (cmp_min >= 0 && cmp_max <= 0) {
+    list_pushBack(list, node->info);
+  }
+
+  if (cmp_max < 0) {
+    _tree_rangeSearch_rec(node->right, min, max, list, cmp);
+  }
+}
+
+void *tree_find_min(BSTree *tree) {
+  if (!tree || tree_isEmpty(tree) == TRUE)
+  return NULL;
+
+  return _tree_find_min_rec(tree->root);
+}
+
+void *tree_find_max(BSTree *tree) {
+  if (!tree || tree_isEmpty(tree) == TRUE)
+  return NULL;
+
+  return _tree_find_max_rec(tree->root);
+}
+
+Bool tree_contains(BSTree *tree, const void *e) {
+  if (!tree || tree_isEmpty(tree) == TRUE)
+  return FALSE;
+
+  return _tree_contains_rec(tree->root, e, tree->cmp_ele);
+}
+
+Status tree_insert(BSTree *tree, const void *e) {
+  Status st = ERROR;
+  
+  if (!tree || !e) return ERROR;
+
+  tree->root = _tree_insert_rec(tree->root, e, tree->cmp_ele, &st);
+  return st;
+}
+
+Status tree_remove(BSTree *tree, const void *e) {
+  if (!tree || !e) return ERROR;
+
+  tree->root = _tree_remove_rec(tree->root, e, tree->cmp_ele);
+
+  return OK;
+}
+
+List *tree_rangeSearch(const BSTree *tree, void *min, void *max) {
+  List *list = NULL;
+
+  if (!tree || !min || !max)
+  return NULL;
+
+  list = list_new();
+  if(!list) return NULL;
+
+  if(tree_isEmpty(tree) == FALSE) {
+    _tree_rangeSearch_rec(tree->root, min, max, list, tree->cmp_ele);
+  }
+
+  return list;
+}
